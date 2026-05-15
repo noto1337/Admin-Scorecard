@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Helen Mae — Weekly Scorecard</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F0F2F5;color:#1C2B3A;padding:16px;min-width:900px}
+.page{max-width:960px;margin:0 auto}
+/* HEADER */
+.header{background:#1A3A5C;border-radius:12px;padding:14px 20px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+.h-left .h-name{font-size:16px;font-weight:700;color:#fff}
+.h-left .h-sub{font-size:10px;color:#7FA8CC;margin-top:2px}
+.h-right{text-align:right}
+.week-label{font-size:10px;color:#7FA8CC;margin-bottom:3px}
+.week-input{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:5px 10px;font-size:13px;font-weight:600;color:#fff;font-family:inherit;outline:none}
+/* GRID LAYOUT */
+.grid{display:grid;grid-template-columns:1fr 260px;gap:12px;margin-bottom:12px}
+/* SCORES */
+.scores-card{background:#fff;border:1px solid #E2E6EA;border-radius:12px;overflow:hidden}
+.scores-title{background:#1A3A5C;padding:8px 14px;font-size:10px;font-weight:700;color:#fff;letter-spacing:.06em;text-transform:uppercase}
+.cat{display:grid;grid-template-columns:1fr 70px;border-bottom:1px solid #F2F4F6}
+.cat:last-child{border-bottom:none}
+.cat-info{padding:9px 14px}
+.cat-name{font-size:12px;font-weight:700;color:#1A3A5C;margin-bottom:1px}
+.cat-desc{font-size:10px;color:#aaa;line-height:1.4}
+.cat-score{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 6px;background:#F8F9FA;border-left:1px solid #F2F4F6;gap:2px}
+.cat-score select{font-size:17px;font-weight:700;color:#1A3A5C;background:transparent;border:none;text-align:center;width:48px;cursor:pointer;outline:none;font-family:inherit}
+.cat-pct{font-size:11px;font-weight:700;color:#0E7C6A}
+.cat-wt{font-size:9px;color:#ccc}
+.tag{font-size:8px;font-weight:700;background:#E6F1FB;color:#185FA5;padding:1px 5px;border-radius:10px;margin-left:4px;vertical-align:middle}
+/* RIGHT COLUMN */
+.right-col{display:flex;flex-direction:column;gap:12px}
+/* SCORE RESULT */
+.result-card{background:#fff;border:1px solid #E2E6EA;border-radius:12px;overflow:hidden}
+.result-banner{background:linear-gradient(135deg,#0E7C6A,#085041);padding:14px 16px;text-align:center}
+.rb-label{font-size:10px;color:#7ECCC0;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.rb-pct{font-size:44px;font-weight:800;color:#fff;line-height:1}
+.rb-sub{font-size:10px;color:#7ECCC0;margin-top:4px}
+.prog-wrap{padding:10px 14px 6px}
+.prog-bg{background:#F0F2F5;border-radius:99px;height:8px;overflow:hidden}
+.prog-fg{height:8px;border-radius:99px;transition:width .3s}
+.prog-labels{display:flex;justify-content:space-between;font-size:9px;color:#bbb;margin-top:3px}
+.stats-row{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid #F2F4F6}
+.stat{padding:8px 10px;text-align:center;border-right:1px solid #F2F4F6}
+.stat:last-child{border-right:none}
+.stat-label{font-size:9px;color:#aaa;margin-bottom:2px}
+.stat-val{font-size:13px;font-weight:700;color:#1C2B3A}
+/* KEY */
+.key-card{background:#fff;border:1px solid #E2E6EA;border-radius:12px;overflow:hidden}
+.key-title{background:#F8F9FA;padding:7px 14px;font-size:10px;font-weight:700;color:#888;letter-spacing:.05em;text-transform:uppercase;border-bottom:1px solid #F2F4F6}
+.key-row{display:flex;align-items:center;padding:6px 14px;border-bottom:1px solid #F2F4F6;gap:10px}
+.key-row:last-child{border-bottom:none}
+.key-score{font-size:14px;font-weight:800;width:16px;text-align:center}
+.key-label{font-size:11px;color:#555;flex:1}
+.key-pct{font-size:11px;font-weight:700}
+/* BOTTOM ROW */
+.bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+/* REFLECTIONS */
+.reflect-card{background:#fff;border:1px solid #E2E6EA;border-radius:12px;overflow:hidden}
+.reflect-title{background:#1A3A5C;padding:7px 14px;font-size:10px;font-weight:700;color:#fff;letter-spacing:.06em;text-transform:uppercase}
+.reflect-q{padding:7px 14px 0;font-size:10px;font-weight:700;color:#555}
+.reflect-card textarea{width:100%;border:none;outline:none;padding:3px 14px 8px;font-size:11px;font-family:inherit;color:#1C2B3A;background:transparent;resize:none;line-height:1.5}
+/* GINNY */
+.ginny-card{background:#fff;border:1px solid #E2E6EA;border-radius:12px;overflow:hidden}
+.ginny-title{background:#0E7C6A;padding:7px 14px;font-size:10px;font-weight:700;color:#fff;letter-spacing:.06em;text-transform:uppercase}
+.ginny-q{padding:7px 14px 0;font-size:10px;font-weight:700;color:#085041}
+.ginny-card textarea{width:100%;border:none;outline:none;padding:3px 14px 8px;font-size:11px;font-family:inherit;color:#1C2B3A;background:transparent;resize:none;line-height:1.5}
+.ginny-approved{display:flex;align-items:center;gap:8px;padding:8px 14px;border-top:1px solid #F2F4F6}
+.ginny-approved label{font-size:10px;font-weight:700;color:#085041}
+.ginny-approved input{accent-color:#0E7C6A;width:14px;height:14px;cursor:pointer}
+.ginny-approved span{font-size:11px;color:#1C2B3A}
+/* TRACKER */
+.tracker-card{background:#fff;border:1px solid #E2E6EA;border-radius:12px;overflow:hidden;margin-bottom:12px}
+.tracker-title{background:#F8F9FA;padding:7px 14px;font-size:10px;font-weight:700;color:#888;letter-spacing:.05em;text-transform:uppercase;border-bottom:1px solid #F2F4F6}
+.tracker-inner{display:grid;grid-template-columns:100px repeat(5,1fr);font-size:11px}
+.th{padding:6px 8px;font-weight:700;color:#999;font-size:10px;text-align:center;background:#F8F9FA;border-right:1px solid #F2F4F6;border-bottom:1px solid #F2F4F6}
+.th:first-child{text-align:left}
+.td{padding:8px;text-align:center;border-right:1px solid #F2F4F6;display:flex;align-items:center;justify-content:center}
+.td:first-child{justify-content:flex-start;padding-left:14px;font-weight:700;color:#666;font-size:10px}
+.td input[type=number]{width:52px;border:1px solid #E2E6EA;border-radius:5px;padding:4px 4px;font-size:11px;text-align:center;background:#fff;color:#1C2B3A;font-family:inherit}
+.td input[type=text]{width:80px;border:1px solid #E2E6EA;border-radius:5px;padding:4px;font-size:10px;text-align:center;background:#fff;color:#1C2B3A;font-family:inherit}
+.t-total{font-weight:800;color:#0E7C6A;font-size:13px}
+.t-avg{font-weight:800;color:#1A3A5C;font-size:13px}
+/* FOOTER */
+.footer{text-align:center;font-size:10px;color:#bbb;padding:4px 0 2px}
+/* PRINT */
+@media print{
+  body{background:#fff;padding:8px}
+  .page{max-width:100%}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- HEADER -->
+<div class="header">
+  <div class="h-left">
+    <div class="h-name">Helen Mae — Weekly Performance Scorecard</div>
+    <div class="h-sub">Clean Home Power Washing &nbsp;·&nbsp; Remote Admin &nbsp;·&nbsp; Mon–Fri 7:00am–3:30pm PHT &nbsp;·&nbsp; Screenshot and send to Ginny in #admin each Friday</div>
+  </div>
+  <div class="h-right">
+    <div class="week-label">Week of</div>
+    <input class="week-input" type="date" id="weekOf">
+  </div>
+</div>
+
+<!-- MAIN GRID -->
+<div class="grid">
+
+  <!-- LEFT: SCORES -->
+  <div class="scores-card">
+    <div class="scores-title">My scores this week — score yourself honestly 1 to 5</div>
+
+    <div class="cat">
+      <div class="cat-info">
+        <div class="cat-name">Daily checklist &amp; system setup</div>
+        <div class="cat-desc">Logged into Email, Slack, RingCentral, TCF on time · Checklist done daily · No skipped items · Overnight activity reviewed</div>
+      </div>
+      <div class="cat-score">
+        <select id="s1" onchange="calc()"><option value="5">5</option><option value="4">4</option><option value="3">3</option><option value="2">2</option><option value="1">1</option></select>
+        <div class="cat-pct" id="p1">100%</div>
+        <div class="cat-wt">wt 20%</div>
+      </div>
+    </div>
+
+    <div class="cat">
+      <div class="cat-info">
+        <div class="cat-name">KPI scorecard data entry</div>
+        <div class="cat-desc">Production KPI, callback tracking, admin KPI entered accurately and on time · Technician daily totals updated in TCF · No errors</div>
+      </div>
+      <div class="cat-score">
+        <select id="s2" onchange="calc()"><option value="5">5</option><option value="4">4</option><option value="3">3</option><option value="2">2</option><option value="1">1</option></select>
+        <div class="cat-pct" id="p2">100%</div>
+        <div class="cat-wt">wt 20%</div>
+      </div>
+    </div>
+
+    <div class="cat">
+      <div class="cat-info">
+        <div class="cat-name">Accounts receivable &amp; payable</div>
+        <div class="cat-desc">Unpaid invoices posted to #accounts-receivable same day · AP emails in correct Slack thread · All follow-ups logged · No email left undocumented</div>
+      </div>
+      <div class="cat-score">
+        <select id="s3" onchange="calc()"><option value="5">5</option><option value="4">4</option><option value="3">3</option><option value="2">2</option><option value="1">1</option></select>
+        <div class="cat-pct" id="p3">100%</div>
+        <div class="cat-wt">wt 15%</div>
+      </div>
+    </div>
+
+    <div class="cat">
+      <div class="cat-info">
+        <div class="cat-name">Communication &amp; response time</div>
+        <div class="cat-desc">All emails, texts, Slack messages replied to within agreed window · Proactive updates sent · Customer profiles logged · No dropped messages</div>
+      </div>
+      <div class="cat-score">
+        <select id="s4" onchange="calc()"><option value="5">5</option><option value="4">4</option><option value="3">3</option><option value="2">2</option><option value="1">1</option></select>
+        <div class="cat-pct" id="p4">100%</div>
+        <div class="cat-wt">wt 15%</div>
+      </div>
+    </div>
+
+    <div class="cat">
+      <div class="cat-info">
+        <div class="cat-name">Phone overflow coverage <span class="tag">new</span></div>
+        <div class="cat-desc">Answered inbound calls when Ginny unavailable · Followed call script · Logged in RingCentral · No missed handoffs · Caller info in TCF/Slack</div>
+      </div>
+      <div class="cat-score">
+        <select id="s5" onchange="calc()"><option value="5">5</option><option value="4">4</option><option value="3">3</option><option value="2">2</option><option value="1">1</option></select>
+        <div class="cat-pct" id="p5">100%</div>
+        <div class="cat-wt">wt 15%</div>
+      </div>
+    </div>
+
+    <div class="cat">
+      <div class="cat-info">
+        <div class="cat-name">Scheduling — accepted estimates <span class="tag">new</span></div>
+        <div class="cat-desc">All estimates accepted via email or text booked in Customer Factor same day · Customer confirmed · Field team notified in Slack · Zero missed</div>
+      </div>
+      <div class="cat-score">
+        <select id="s6" onchange="calc()"><option value="5">5</option><option value="4">4</option><option value="3">3</option><option value="2">2</option><option value="1">1</option></select>
+        <div class="cat-pct" id="p6">100%</div>
+        <div class="cat-wt">wt 15%</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT COLUMN -->
+  <div class="right-col">
+
+    <!-- RESULT -->
+    <div class="result-card">
+      <div class="result-banner">
+        <div class="rb-label">This week's score</div>
+        <div class="rb-pct" id="weekPct">100%</div>
+        <div class="rb-sub">Counts toward monthly average</div>
+      </div>
+      <div class="prog-wrap">
+        <div class="prog-bg"><div class="prog-fg" id="progBar" style="width:100%;background:linear-gradient(90deg,#0E7C6A,#1D9E75)"></div></div>
+        <div class="prog-labels"><span>0%</span><span>50%</span><span>100%</span></div>
+      </div>
+      <div class="stats-row">
+        <div class="stat"><div class="stat-label">Score</div><div class="stat-val" id="scoreRaw">30 / 30</div></div>
+        <div class="stat"><div class="stat-label">Max bonus</div><div class="stat-val">$200/mo</div></div>
+      </div>
+      <div style="padding:8px 14px;border-top:1px solid #F2F4F6;font-size:10px;color:#aaa;line-height:1.5">
+        Monthly payout = avg of 4 weekly % × $200<br>
+        <span style="color:#0E7C6A;font-weight:600">Example: 95%+100%+80%+90% ÷ 4 = 91.25% → $182.50</span>
+      </div>
+    </div>
+
+    <!-- KEY -->
+    <div class="key-card">
+      <div class="key-title">Scoring guide</div>
+      <div class="key-row"><div class="key-score" style="color:#085041">5</div><div class="key-label">Excellent — no errors, no follow-up</div><div class="key-pct" style="color:#085041">100%</div></div>
+      <div class="key-row"><div class="key-score" style="color:#27500A">4</div><div class="key-label">Good — minor issue, self-corrected</div><div class="key-pct" style="color:#27500A">80%</div></div>
+      <div class="key-row"><div class="key-score" style="color:#633806">3</div><div class="key-label">OK — some gaps, follow-up needed</div><div class="key-pct" style="color:#633806">60%</div></div>
+      <div class="key-row"><div class="key-score" style="color:#791F1F">2</div><div class="key-label">Needs work — recurring issues</div><div class="key-pct" style="color:#791F1F">30%</div></div>
+      <div class="key-row"><div class="key-score" style="color:#501313">1</div><div class="key-label">Did not meet expectations</div><div class="key-pct" style="color:#501313">0%</div></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- BOTTOM: REFLECTIONS + GINNY -->
+<div class="bottom-grid">
+
+  <!-- HELEN'S REFLECTIONS -->
+  <div class="reflect-card">
+    <div class="reflect-title">My weekly wins &amp; reflections</div>
+    <div class="reflect-q">One thing I did really well this week</div>
+    <textarea rows="2" placeholder="Write it here..."></textarea>
+    <div class="reflect-q" style="border-top:1px solid #F2F4F6">One thing I want to do better next week</div>
+    <textarea rows="2" placeholder="Write it here..."></textarea>
+    <div class="reflect-q" style="border-top:1px solid #F2F4F6">Something I need from Raymond or Ginny</div>
+    <textarea rows="2" placeholder="Write it here..."></textarea>
+  </div>
+
+  <!-- GINNY'S SECTION -->
+  <div class="ginny-card">
+    <div class="ginny-title">Ginny's coaching notes</div>
+    <div class="ginny-q">Overall feedback this week</div>
+    <textarea rows="2" placeholder="Notes..."></textarea>
+    <div class="ginny-q" style="border-top:1px solid #F2F4F6">Focus areas for next week</div>
+    <textarea rows="2" placeholder="Notes..."></textarea>
+    <div class="ginny-q" style="border-top:1px solid #F2F4F6">Confirmed weekly %</div>
+    <textarea rows="1" placeholder="Confirmed % and any adjustments..."></textarea>
+    <div class="ginny-approved">
+      <label>Bonus approved?</label>
+      <input type="radio" name="approved" id="yes"><span>YES</span>
+      <input type="radio" name="approved" id="no" style="margin-left:8px"><span>NO</span>
+      <input type="radio" name="approved" id="partial" style="margin-left:8px"><span>PARTIAL</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- MONTHLY TRACKER -->
+<div class="tracker-card">
+  <div class="tracker-title">Monthly bonus tracker &nbsp;·&nbsp; <span style="font-size:9px;text-transform:none;letter-spacing:0;color:#aaa">Ginny logs each week's % — auto-calculates payout at month end</span></div>
+  <div class="tracker-inner">
+    <div class="th">Category</div>
+    <div class="th">Week 1</div>
+    <div class="th">Week 2</div>
+    <div class="th">Week 3</div>
+    <div class="th">Week 4</div>
+    <div class="th">Result</div>
+
+    <div class="td">Weekly %</div>
+    <div class="td"><input type="number" id="t1" placeholder="%" min="0" max="100" oninput="calcT()"></div>
+    <div class="td"><input type="number" id="t2" placeholder="%" min="0" max="100" oninput="calcT()"></div>
+    <div class="td"><input type="number" id="t3" placeholder="%" min="0" max="100" oninput="calcT()"></div>
+    <div class="td"><input type="number" id="t4" placeholder="%" min="0" max="100" oninput="calcT()"></div>
+    <div class="td t-avg" id="tAvg">—</div>
+
+    <div class="td">Bonus payout</div>
+    <div class="td" style="font-size:10px;color:#aaa" id="b1">—</div>
+    <div class="td" style="font-size:10px;color:#aaa" id="b2">—</div>
+    <div class="td" style="font-size:10px;color:#aaa" id="b3">—</div>
+    <div class="td" style="font-size:10px;color:#aaa" id="b4">—</div>
+    <div class="td t-total" id="tPayout">—</div>
+
+    <div class="td">Paid on</div>
+    <div class="td"><input type="text" placeholder="date"></div>
+    <div class="td"><input type="text" placeholder="date"></div>
+    <div class="td"><input type="text" placeholder="date"></div>
+    <div class="td"><input type="text" placeholder="date"></div>
+    <div class="td"></div>
+  </div>
+</div>
+
+<div class="footer">Clean Home Power Washing &nbsp;·&nbsp; "Taking the hassle out of cleaning your castle" &nbsp;·&nbsp; You are valued, Helen Mae. Keep showing up with excellence.</div>
+
+</div>
+
+<script>
+var w=[.20,.20,.15,.15,.15,.15];
+var p={5:1,4:.8,3:.6,2:.3,1:0};
+function calc(){
+  var sc=0,tot=0;
+  for(var i=1;i<=6;i++){
+    var v=parseInt(document.getElementById('s'+i).value);
+    tot+=w[i-1]*p[v]*100;
+    sc+=v;
+    document.getElementById('p'+i).textContent=Math.round(p[v]*100)+'%';
+  }
+  var pct=Math.round(tot);
+  document.getElementById('weekPct').textContent=pct+'%';
+  document.getElementById('scoreRaw').textContent=sc+' / 30';
+  document.getElementById('progBar').style.width=pct+'%';
+  var bar=document.getElementById('progBar');
+  bar.style.background=pct>=90?'linear-gradient(90deg,#0E7C6A,#1D9E75)':pct>=70?'linear-gradient(90deg,#BA7517,#EF9F27)':'linear-gradient(90deg,#A32D2D,#E24B4A)';
+  document.getElementById('weekPct').style.fontSize=pct===100?'44px':'44px';
+}
+function calcT(){
+  var sum=0,count=0;
+  for(var i=1;i<=4;i++){
+    var raw=document.getElementById('t'+i).value;
+    var v=parseFloat(raw);
+    if(raw!==''&&!isNaN(v)){sum+=v;count++;}
+    document.getElementById('b'+i).textContent=raw!==''&&!isNaN(v)?'$'+((v/100)*200).toFixed(2):'—';
+  }
+  if(count===0){document.getElementById('tAvg').textContent='—';document.getElementById('tPayout').textContent='—';return;}
+  var avg=sum/count;
+  document.getElementById('tAvg').textContent=avg.toFixed(1)+'% avg';
+  document.getElementById('tPayout').textContent='$'+((avg/100)*200).toFixed(2);
+}
+calc();
+var today=new Date();
+document.getElementById('weekOf').value=today.toISOString().split('T')[0];
+</script>
+</body>
+</html>
